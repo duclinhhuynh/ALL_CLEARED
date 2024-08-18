@@ -1,8 +1,8 @@
 import React from 'react'
 
-const Body = ({ elements, points }) => {
+const Body = ({ elements, points}) => {
     return (
-        <div style={{margin: 'auto',top:'10px', position: 'relative', width: '500px', height: '430px', border: '1px solid black'}}>
+        <div style={{ margin: 'auto', top: '10px', position: 'relative', width: '500px', height: '450px', border: '1px solid black' }}>
             {elements.map((el) => (
                 <div
                     key={el.id}
@@ -19,7 +19,7 @@ const Body = ({ elements, points }) => {
                         alignItems: 'center',
                         cursor: 'pointer',
                         transition: 'background-color 0.3s ease',
-                        boxSizing: 'border-box'  
+                        boxSizing: 'border-box'
                     }}>
                     {el.number}
                 </div>
