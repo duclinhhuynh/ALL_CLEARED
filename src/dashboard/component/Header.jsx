@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const Header = ({ points, time, handleRestart, setPoints, gameStarted, handlePlay }) => {
+const Header = ({ points, time, handleRestart, setPoints, gameStarted }) => {
     return (
         <div style={{ margin: 'auto', width: '500px' }}>
             <div>

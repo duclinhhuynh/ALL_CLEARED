@@ -16,7 +16,7 @@ const Home = () => {
         id: i,
         number: i,
         top: `${Math.random() * 90}%`,
-        left: `${Math.random() * 90}%`,
+        right: `${Math.random() * 90}%`,
       });
     }
     return positions;
@@ -35,11 +35,38 @@ const Home = () => {
     setTime(0);
     setGameOver(false);
     setGameWon(false);
-    setGameStarted(false); 
+    setGameStarted(false);
     setElements(createElements)
   };
-  const handlePlay  = async () => {
-    await setGameStarted(true);
+  const handleCircleClick = (id) => {
+    // Find the clicked element
+    const clickedElement = elements.find((el) => el.id === id);
+    if (!clickedElement || clickedElement.clicked || gameOver || gameWon) return;
+
+    // gameOver if element first # elment last
+    // lastclicked = 0,1,2,3,4
+    if (clickedElement.number !== lastClicked + 1) {
+      setGameOver(true);
+      return;
+    }
+    // Update the last clicked number
+    setLastClicked(clickedElement.number);
+    // Mark el as clicked and turn it red
+    setElements((clickedEl) =>
+      clickedEl.map((el) => {
+        if (el.id === id) {
+          return { ...el, clicked: true };
+        } else {
+          return el;
+        }
+      })
+    );
+    // Delay and removal of the el clicked 
+    setTimeout(() => {
+      setElements((prevEl) =>
+        prevEl.filter((point) => point.id !== id)
+      );
+    }, 1000);
   };
   return (
     <div style={{ margin: 'auto', position: 'relative', width: '550px', height: '630px', border: '1px solid black' }}>
@@ -47,12 +74,13 @@ const Home = () => {
         points={points}
         setPoints={setPoints}
         handleRestart={handleRestart}
-        time={time} 
-        gameStarted = {gameStarted}
-        handlePlay = {handlePlay}
-        />
+        time={time}
+        gameStarted={gameStarted}
+      />
       <Body elements={elements}
-        points={points} />
+        points={points}
+        handleCircleClick={handleCircleClick}
+      />
       {/* <Footer /> */}
     </div>
   )
