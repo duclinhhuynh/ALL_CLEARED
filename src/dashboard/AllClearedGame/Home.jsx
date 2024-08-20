@@ -8,7 +8,7 @@ const Home = () => {
   const [gameOver, setGameOver] = useState(false);
   const [lastClicked, setLastClicked] = useState(0);
   const [gameWon, setGameWon] = useState(false);
-  const [gameStarted, setGameStarted] = useState(false);
+  const [gameStarted, setGameStarted] = useState(true);
   const createElements = () => {
     const positions = [];
     for (let i = 1; i <= points; i++) {
@@ -24,20 +24,27 @@ const Home = () => {
   const [elements, setElements] = useState(createElements());
   // if game notwon or notover then run funciton
   useEffect(() => {
-    if (!gameOver && !gameWon) {
+    if (!gameOver && !gameWon && gameStarted === false) {
       const interval = setInterval(() => {
         setTime((prevTime) => prevTime + 0.1);
       }, 100);
       return () => clearInterval(interval);
     }
-  }, [gameOver, gameWon]);
+  }, [gameOver, gameWon, gameStarted]);
   const handleRestart = () => {
     setTime(0);
     setGameOver(false);
     setGameWon(false);
     setGameStarted(false);
+    setLastClicked(0);
     setElements(createElements)
   };
+  useEffect(() => {
+    // If all element are cleared and game is not over, the game is won
+    if (elements.length === 0 && !gameOver && lastClicked === points) {
+      setGameWon(true);
+    }
+  }, [elements, gameOver, lastClicked, points]);
   const handleCircleClick = (id) => {
     // Find the clicked element
     const clickedElement = elements.find((el) => el.id === id);
@@ -75,11 +82,15 @@ const Home = () => {
         setPoints={setPoints}
         handleRestart={handleRestart}
         time={time}
+        gameOver={gameOver}
+        gameWon={gameWon}
+        setGameStarted={setGameStarted}
         gameStarted={gameStarted}
       />
       <Body elements={elements}
         points={points}
         handleCircleClick={handleCircleClick}
+        gameStarted={gameStarted}
       />
       {/* <Footer /> */}
     </div>
